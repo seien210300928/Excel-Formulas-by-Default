@@ -67,12 +67,14 @@ End Sub
 Separation of event triggering conditions and processing scope  
 触发条件：代码仅在用户修改`<Range_1>`内的单元格时触发（通过`Intersect(Target, Range("<Range_1>"))`判断）。  
 Triggering condition: The code only triggers when the user modifies cells within `<Range_1>` (judged by `Intersect(Target, Range("<Range_1>"))`).  
-处理范围：但后续遍历的是`<Range_2>`内的单元格（通过`Intersect(Target, Range("<Range_2>"))）`。
+处理范围：但后续遍历的是`<Range_2>`内的单元格（通过`Intersect(Target, Range("<Range_2>"))）`。  
 Processing scope: However, the subsequent iteration is over cells within Range_2 (via Intersect(`Target, Range("<Range_2>"))`).
 <br>
 可能的问题：  
 *如果`<Range_2>`包含`<Range_1>`以外的单元格，这些额外的单元格即使被修改也不会触发事件，导致代码无法处理。
-*如果`<Range_2>`是`<Range_1>`的子集，只有子集内的修改会被处理，其他部分会被忽略。  
+If `<Range_2>` includes cells outside `<Range_1>`, modifications to these extra cells will not trigger the event, leaving them unprocessed by the code.  
+*如果`<Range_2>`是`<Range_1>`的子集，只有子集内的修改会被处理，其他部分会被忽略。
+If `<Range_2>` is a subset of `<Range_1>`, only modifications within the subset will be processed, while other parts are ignored.
 
 3. 公式应用逻辑异常  
 假设用户修改了`<Range_1>`但未修改`<Range_2>`中的单元格：  
