@@ -63,46 +63,61 @@ End Sub
 `<Range_1>`为代码生效范围；`<Range_2>`为代码执行范围，通常来说这**两个值相等**。  
 `<Range_1>` is the scope where the code takes effect; `<Range_2>` is the scope where the code executes. Generally, **these two values are equal**.  
 #### 如果不相等可能会出现以下情况：<br>Possible issues if they are not equal:
-1. 事件触发条件与处理范围分离  
-Separation of event triggering conditions and processing scope  
-触发条件：代码仅在用户修改`<Range_1>`内的单元格时触发（通过`Intersect(Target, Range("<Range_1>"))`判断）。  
-Triggering condition: The code only triggers when the user modifies cells within `<Range_1>` (judged by `Intersect(Target, Range("<Range_1>"))`).  
-处理范围：但后续遍历的是`<Range_2>`内的单元格（通过`Intersect(Target, Range("<Range_2>"))）`。  
-Processing scope: However, the subsequent iteration is over cells within Range_2 (via Intersect(`Target, Range("<Range_2>"))`).
-<br>
-可能的问题：  
-*如果`<Range_2>`包含`<Range_1>`以外的单元格，这些额外的单元格即使被修改也不会触发事件，导致代码无法处理。
-If `<Range_2>` includes cells outside `<Range_1>`, modifications to these extra cells will not trigger the event, leaving them unprocessed by the code.  
-*如果`<Range_2>`是`<Range_1>`的子集，只有子集内的修改会被处理，其他部分会被忽略。
-If `<Range_2>` is a subset of `<Range_1>`, only modifications within the subset will be processed, while other parts are ignored.
+1. ##### 事件触发条件与处理范围分离<br>Separation of event triggering conditions and processing scope
+    触发条件：代码仅在用户修改`<Range_1>`内的单元格时触发（通过`Intersect(Target, Range("<Range_1>"))`判断）。  
+    Triggering condition: The code only triggers when the user modifies cells within `<Range_1>` (judged by `Intersect(Target, Range("<Range_1>"))`).  
+    处理范围：但后续遍历的是`<Range_2>`内的单元格（通过`Intersect(Target, Range("<Range_2>"))`）。  
+    Processing scope: However, the subsequent iteration is over cells within Range_2 (via `Intersect(Target, Range("<Range_2>"))`).  
+    <br>
+    可能的问题：  
+    Potential problems:  
+    * 如果`<Range_2>`包含`<Range_1>`以外的单元格，这些额外的单元格即使被修改也不会触发事件，导致代码无法处理。  
+    If `<Range_2>` includes cells outside `<Range_1>`, modifications to these extra cells will not trigger the event, leaving them unprocessed by the code.  
+    * 如果`<Range_2>`是`<Range_1>`的子集，只有子集内的修改会被处理，其他部分会被忽略。
+    If `<Range_2>` is a subset of `<Range_1>`, only modifications within the subset will be processed, while other parts are ignored.
 
-3. 公式应用逻辑异常  
-假设用户修改了`<Range_1>`但未修改`<Range_2>`中的单元格：  
-<br>
-*代码会遍历`<Range_2>`与`<Target>`的交集，但此时交集可能为空，导致`<For Each>`循环不执行任何操作。  
-*即使`<Range_2>`外的单元格被清空，也不会应用公式。
+2. ##### 公式应用逻辑异常<br>Abnormal formula application logic  
+    假设用户修改了`<Range_1>`但未修改`<Range_2>`中的单元格：  
+    Suppose the user modifies `<Range_1>` but not cells in `<Range_2>`:
+    <br>
+    * 代码会遍历`<Range_2>`与`<Target>`的交集，但此时交集可能为空，导致`<For Each>`循环不执行任何操作。  
+    The code will iterate over the intersection of `<Range_2>` and `<Target>`, which may be empty in this case, causing the `<For Each>` loop to do nothing.  
+    * 即使`<Range_2>`外的单元格被清空，也不会应用公式。  
+    Even if cells outside `<Range_2>` are cleared, the formula will not be applied.
 
-4. 示例场景  
-假设：  
-`Range_1 = "A1:B10"`（事件触发范围）  
-`Range_2 = "C1:D10"`（公式应用范围）  
-<br>
-当用户修改`A1:B10`内的单元格时：  
-代码会触发，但`Intersect(Target, Range("C1:D10"))`可能为空（因为`Target` 在 `A1:B10`内），导致公式无法应用到任何单元格。
+3. ##### 示例场景<br>Example scenario
+    假设：  
+    * `Range_1 = "A1:B10"`（事件触发范围）  
+    `Range_1 = "A1:B10"`(event triggering scope)  
+    * `Range_2 = "C1:D10"`（公式应用范围）  
+    `Range_2 = "C1:D10"` (formula application scope)  
+    
+    当用户修改`A1:B10`内的单元格时：  
+    When the user modifies cells within `A1:B10`:  
+    * 代码会触发，但`Intersect(Target, Range("C1:D10"))`可能为空（因为`Target` 在 `A1:B10`内），导致公式无法应用到任何单元格。  
+    The code triggers, but `Intersect(Target, Range("C1:D10"))` may be empty (since `Target` is within `A1:B10`), resulting in no formula being applied to any cells.
 
-5. 潜在风险  
-无限循环风险：如果`<Range_2>`与`<Range_1>`有重叠，且公式计算结果可能影响`<Range_1>`内的单元格，可能导致事件被反复触发（即使有`EnableEvents = False`保护）。  
-逻辑错误：代码注释中提到`<Range_2>=<Range_1>`，说明原设计期望两个范围一致。不一致时违背开发者意图。
+4. ##### 潜在风险<br>Potential risks
+    无限循环风险：如果`<Range_2>`与`<Range_1>`有重叠，且公式计算结果可能影响`<Range_1>`内的单元格，可能导致事件被反复触发（即使有`EnableEvents = False`保护）。  
+    Infinite loop risk: If `<Range_2>` overlaps with `<Range_1>` and the formula calculation results may affect cells in `<Range_1>`, the event may be repeatedly triggered (even with `EnableEvents = False` protection).
+
 
 ### `<Row,Column>`
 选择指定行或列。  
-*若选择行，则`<Row,Column>`直接替换为`Row`  
-*若选择列，则`<Row,Column>`直接替换为`Column`
+Select specified rows or columns.  
+* 若选择行，则`<Row,Column>`直接替换为`Row`<br>
+If selecting rows, replace `<Row, Column> `directly with `Row`.
+* 若选择列，则`<Row,Column>`直接替换为`Column`<br>
+If selecting columns, replace `<Row, Column>` directly with `Column`.
 
 ### `<Row_value,Column_value>`
-指定行或列的数值，直接替换为相应数字即可。
-若指定的列，则需要将**纯字母27进制**转为**10进制**后替换
+指定行或列的数值，直接替换为相应数字即可。  
+The numeric value of the specified row or column; replace it directly with the corresponding number.  
+若指定的列，则需要将**纯字母27进制**转为**10进制**后替换。  
+If a column is specified, convert the **pure alphabetic base-27** notation to **base-10** notation before replacement.
 
 ### `<Formula_1>`&&`<Formula_2>`
-*`<Formula_1>`为特殊处理范围指定公式  
-*`<Formula_2>`为非特殊处理范围指定公式
+* `<Formula_1>`为特殊处理范围指定公式。  
+`<Formula_1>` is the formula specified for the special processing scope.
+* `<Formula_2>`为非特殊处理范围指定公式。  
+`<Formula_2>` is the formula specified for the non-special processing scope.
