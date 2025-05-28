@@ -64,7 +64,7 @@ End Sub
 `<Range_1>` is the scope where the code takes effect; `<Range_2>` is the scope where the code executes. Generally, **these two values are equal**.  
 #### 如果不相等可能会出现以下情况：<br>Possible issues if they are not equal:
 1. 事件触发条件与处理范围分离  
-1. Separation of event triggering conditions and processing scope  
+Separation of event triggering conditions and processing scope  
 触发条件：代码仅在用户修改`<Range_1>`内的单元格时触发（通过`Intersect(Target, Range("<Range_1>"))`判断）。  
 Triggering condition: The code only triggers when the user modifies cells within `<Range_1>` (judged by `Intersect(Target, Range("<Range_1>"))`).  
 处理范围：但后续遍历的是`<Range_2>`内的单元格（通过`Intersect(Target, Range("<Range_2>"))）`。
