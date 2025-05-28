@@ -9,7 +9,7 @@ Before using, please ensure that the spreadsheet file is in the format of a Micr
 对于其他软件或文件格式，甚至是不同版本的Microsoft Office Excel，此 VBA 代码的有效性不保证。  
 When you are using other softwares or file formats, or even different versions of Microsoft Office Excel, there won't be working of VBA codes.
 
-```
+```VBA
 ' 工作表变更事件处理程序 - 当用户修改工作表中的单元格时触发。
 ' Worksheet change event handler: This function is triggered when a user modifies any table cells within the worksheet.
 Private Sub Worksheet_Change(ByVal Target As Range)
@@ -101,4 +101,3 @@ End Sub
 ### `<Formula_1>`&&`<Formula_2>`
 `<Formula_1>`为特殊处理范围指定公式  
 `<Formula_2>`为非特殊处理范围指定公式
-
