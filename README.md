@@ -103,3 +103,17 @@ End Sub
 *`<Formula_2>`为非特殊处理范围指定公式
 
 
+```js:/static/info-logo-script.js showLineNumbers focusBlur
+var _t_author = "ninohx96";
+// hl-11
+var _t_name = "¡HolaH! Blog";
+(function () {
+  console.log(
+    // hl-00
+    `%c💎${window._t_name}%c🍉 ${window._t_author}`,
+    "color:#fff;background-color:#d6409f;line-height:20px;border-radius: 5px 0 0 5px;padding: 0 8px",
+    // hl-99
+    "color:#fff;background-color:#3e63dd;line-height:20px;border-radius: 0 5px 5px 0;padding: 0 8px;",
+  );
+})();
+```
