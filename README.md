@@ -58,12 +58,11 @@ Private Sub Worksheet_Change(ByVal Target As Range)
 End Sub
 ``` 
 
-## 其中`<>`为替换标签，以下为详细解释  
+## 其中`<>`为替换标签，以下为详细解释
 ### `<Range_1>`&&`<Range_2>`
 `<Range_1>`为代码生效范围；`<Range_2>`为代码执行范围，通常来说这两个值相等。
 
 #### 如果不相等可能会出现以下情况
-
 1. 事件触发条件与处理范围分离  
 触发条件：代码仅在用户修改 `Range_1` 内的单元格时触发（通过 `Intersect(Target, Range("<Range_1>"))` 判断）。  
 处理范围：但后续遍历的是 `Range_2` 内的单元格（通过 `Intersect(Target, Range("<Range_2>"))`）。  
@@ -90,16 +89,16 @@ End Sub
 无限循环风险：如果 `Range_2` 与 `Range_1` 有重叠，且公式计算结果可能影响 `Range_1` 内的单元格，可能导致事件被反复触发（即使有 `EnableEvents = False` 保护）。  
 逻辑错误：代码注释中提到 `Range_2=Range_1`，说明原设计期望两个范围一致。不一致时违背开发者意图。
 
-### `<Row,Column>`  
+### `<Row,Column>`
 选择指定行或列。  
 若选择行，则`<Row,Column>`直接替换为`Row`  
 若选择列，则`<Row,Column>`直接替换为`Column`
 
-### `<Row_value,Column_value>`  
-指定行或列的数值，直接替换为相应数字即可  
+### `<Row_value,Column_value>`
+指定行或列的数值，直接替换为相应数字即可
 若指定的列，则需要将**纯字母27进制**转为**10进制**后替换
 
-### `<Formula_1>`&&`<Formula_2>`  
+### `<Formula_1>`&&`<Formula_2>`
 `<Formula_1>`为特殊处理范围指定公式  
 `<Formula_2>`为非特殊处理范围指定公式
 
