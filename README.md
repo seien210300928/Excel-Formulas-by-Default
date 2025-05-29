@@ -107,7 +107,7 @@ End Sub
 Fill the specified formula when the table cells in the specified range are null.  
 
 Before using, please ensure that the spreadsheet file is in the format of a Microsoft 365MSO(versions 2504 Build 16.0.18730.20186) 64-bit Microsoft Excel Macro-Enabled Workbook (.xlsm).  
-When you are using other softwares or file formats, or even different versions of Microsoft Office Excel, there won't be working of VBA codes.
+When you are using other softwares or file formats, or even different versions of Microsoft Office Excel, the VBA codes may not work.
 
 <pre><code class="language-vba line-numbers">
 ' Worksheet change event handler: This function is triggered when a user modifies any table cells within the worksheet.
