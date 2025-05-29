@@ -1,7 +1,7 @@
 ## Language
-
-- [English](#english)
 - [中文](#中文)
+- [English](#english)
+- [日本語](#日本語)
 
 ---
 ### 中文
@@ -98,8 +98,6 @@ End Sub
 
 
 
-
-
 ---
 ### English
 # Excel-Formulas-by-Default
@@ -188,3 +186,92 @@ If a column is specified, convert the **pure alphabetic base-27** notation to **
 * `<Formula_1>` is the formula specified for the special processing scope.
 *`<Formula_2>` is the formula specified for the non-special processing scope.
 ---
+
+
+### 日本語
+# Excelのデフォルト値（数式で実現）
+
+指定範囲内の表のセルが空の場合、指定された数式を自動的に入力します。
+
+1. 使用する前に、スプレッドシートファイルがMicrosoft 365 MSO（バージョン2504 Build 16.0.18730.20186）64ビットのMicrosoft Excelのマクロを有効にしたブック形式（.xlsm）であることを確認してください。
+2. 他のソフトウェアやファイル形式、さらには異なるバージョンのMicrosoft Office Excelでは、このVBAコードの有効性は保証されません。
+
+```vba
+' ワークシートの変更イベントハンドラ - ユーザーがワークシート内のセルを変更したときにトリガーされます。
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Dim cell As Range
+    ' イベント処理を無効にして、コードが自身をトリガーして無限ループになるのを防ぎます。
+    Application.EnableEvents = False
+    ' 変更されたセルが対象範囲（Range）内にあるかどうかを確認します。
+    If Not Intersect(Target, Range("<Range_1>")) Is Nothing Then
+        ' 対象範囲内で変更されたすべてのセル（Range_2 = Range_1）を繰り返し処理します。
+        For Each cell In Intersect(Target, Range("<Range_2>"))
+            ' セルが空になった場合（値が空文字列）。
+            If cell.Value = "" Then
+                ' 列のアルファベット（例：EまたはI）を格納する変数を宣言します。
+                Dim colLetter As String
+                ' セルのアドレスを分割して列のアルファベット部分を取得します（例：$E$4を "E" に分割）。指定された数式がセルアドレスを参照する場合はこの行が必要です。
+                colLetter = Split(cell.Address, "$")(1)
+                ' 設定する数式を格納する変数を宣言します。
+                Dim formula As String
+                ' 指定された行または列のセルを特殊処理します（Row_value,Column_value）。
+                If cell.<Row,Column> = <Row_value,Column_value> Then
+                    ' 指定された行または列のセルに指定された数式を設定します。
+                    formula = "=<Formula_1>"
+                Else
+                    ' 指定された行または列以外のセルに指定された数式を設定します。指定されたセルに対する追加の処理が必要ない場合は、このIf_Else文を削除できます。
+                    formula = "=<Formula_2>"
+                End If
+                ' 構築された数式をセルに設定します。
+                cell.Formula = formula
+            End If
+        Next cell
+    End If
+    ' イベント処理を復元します。
+    Application.EnableEvents = True
+End Sub
+```
+
+## ここで`<>`は置き換えタグで、以下に詳細な説明を示します：
+
+### `<Range_1>` && `<Range_2>`
+`<Range_1>`はコードの有効範囲です；`<Range_2>`はコードの実行範囲で、通常はこの**2つの値は等しい**です。
+
+#### もし等しくない場合、以下のような状況が発生する可能性があります：
+
+1. ##### イベントトリガー条件と処理範囲の分離
+    トリガー条件：コードはユーザーが`<Range_1>`内のセルを変更したときにのみトリガーされます（`Intersect(Target, Range("<Range_1>"))`で判断）。
+    処理範囲：しかし、後続のループでは`<Range_2>`内のセルを走査します（`Intersect(Target, Range("<Range_2>"))`を通じて）。
+    <br>
+    考えられる問題：
+    * `<Range_2>`に`<Range_1>`以外のセルが含まれている場合、これらの追加セルが変更されてもイベントはトリガーされず、コードが処理できなくなります。
+    * `<Range_2>`が`<Range_1>`の部分集合である場合、部分集合内の変更のみが処理され、他の部分は無視されます。
+
+2. ##### 数式適用ロジックの異常
+    ユーザーが`<Range_1>`を変更したが、`<Range_2>`内のセルを変更しなかったと仮定します：
+    * コードは`<Range_2>`と`<Target>`の共通部分を走査しますが、このとき共通部分が空の場合があり、`<For Each>`ループが何も実行しなくなります。
+    * `<Range_2>`外のセルがクリアされても、数式は適用されません。
+
+3. ##### サンプルシナリオ
+    仮定：
+    * `Range_1 = "A1:B10"`（イベントトリガー範囲）
+    * `Range_2 = "C1:D10"`（数式適用範囲）
+
+    ユーザーが`A1:B10`内のセルを変更したとき：
+    * コードはトリガーされますが、`Intersect(Target, Range("C1:D10"))`が空の場合があり（`Target`は`A1:B10`内にあるため）、数式がどのセルにも適用されなくなります。
+
+4. ##### 潜在的なリスク<br>潜在的なリスク
+    無限ループのリスク：`<Range_2>`と`<Range_1>`が重複し、数式の計算結果が`<Range_1>`内のセルに影響を与える可能性がある場合、イベントが繰り返しトリガーされる可能性があります（`EnableEvents = False`で保護しても）。
+
+### `<Row,Column>`
+指定された行または列を選択します。
+* 行を選択する場合は、`<Row,Column>`を直接`Row`に置き換えます。
+* 列を選択する場合は、`<Row,Column>`を直接`Column`に置き換えます。
+
+### `<Row_value,Column_value>`
+指定された行または列の数値を、それぞれの数字で直接置き換えます。
+指定された列の場合、純粋なアルファベットの27進数を10進数に変換してから置き換えます。
+
+### `<Formula_1>` && `<Formula_2>`
+* `<Formula_1>`は特殊処理範囲に指定された数式です。
+* `<Formula_2>`は非特殊処理範囲に指定された数式です。
