@@ -9,8 +9,8 @@
 
 当指定范围内的表格单元格为空时，自动填写指定的公式。  
 
-1.使用前，请确保电子表格文件为 Microsoft Office 365 Excel 启用宏的工作簿格式（.xlsm）。  
-2.对于其他软件或文件格式，甚至是不同版本的Microsoft Office Excel，此 VBA 代码的有效性不保证。  
+1. 使用前，请确保电子表格文件为 Microsoft Office 365 Excel 启用宏的工作簿格式（.xlsm）。  
+2. 对于其他软件或文件格式，甚至是不同版本的Microsoft Office Excel，此 VBA 代码的有效性不保证。  
 
 <pre><code class="language-vba line-numbers">
 ' 工作表变更事件处理程序 - 当用户修改工作表中的单元格时触发。
