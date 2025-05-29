@@ -23,16 +23,13 @@ Private Sub Worksheet_Change(ByVal Target As Range)
                 Dim colLetter As String
                 ' 通过拆分单元格地址获取列字母部分（例如$E$7拆分为"E"）
                 colLetter = Split(cell.Address, "$")(1)
-                
                 ' 声明变量存储要设置的公式
                 Dim formula As String
-                
                 ' 构建公式逻辑：
                 ' 检查当前单元格所在行的内容是否为空
                 ' 如果为空则显示为空字符串，否则显示0
                 formula = "=IF(ISBLANK(" & colLetter & (cell.Row) & "), """", 0)"
                 ' 例如D7会生成公式: =IF(ISBLANK(D7), "", 0)
-                
                 ' 将构建好的公式设置到单元格中
                 cell.formula = formula
             End If
