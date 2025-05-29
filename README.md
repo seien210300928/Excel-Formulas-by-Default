@@ -9,7 +9,7 @@
 
 当指定范围内的表格单元格为空时，自动填写指定的公式。  
 
-1. 使用前，请确保电子表格文件为 Microsoft Office 365 Excel 启用宏的工作簿格式（.xlsm）。  
+1. 使用前，请确保电子表格文件为Microsoft 365MSO(版本 2504 Build 16.0.18730.20186) 64位 Microsoft Excel 启用宏的工作簿格式（.xlsm）。  
 2. 对于其他软件或文件格式，甚至是不同版本的Microsoft Office Excel，此 VBA 代码的有效性不保证。  
 
 <pre><code class="language-vba line-numbers">
@@ -106,7 +106,7 @@ End Sub
 
 Fill the specified formula when the table cells in the specified range are null.  
 
-Before using, please ensure that the spreadsheet file is in the format of a Microsoft Office 365 Excel Macro-Enabled Workbook (.xlsm).  
+Before using, please ensure that the spreadsheet file is in the format of a Microsoft 365MSO(versions 2504 Build 16.0.18730.20186) 64-bit Microsoft Excel Macro-Enabled Workbook (.xlsm).  
 When you are using other softwares or file formats, or even different versions of Microsoft Office Excel, there won't be working of VBA codes.
 
 <pre><code class="language-vba line-numbers">
