@@ -12,7 +12,7 @@
 1. 使用前，请确保电子表格文件为Microsoft 365MSO(版本 2504 Build 16.0.18730.20186) 64位 Microsoft Excel 启用宏的工作簿格式（.xlsm）。  
 2. 对于其他软件或文件格式，甚至是不同版本的Microsoft Office Excel，此 VBA 代码的有效性不保证。  
 
-<pre><code class="language-vba line-numbers">
+```vba
 ' 工作表变更事件处理程序 - 当用户修改工作表中的单元格时触发。
 modifies any table cells within the worksheet.
 Private Sub Worksheet_Change(ByVal Target As Range)
@@ -49,7 +49,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     ' 恢复事件处理
     Application.EnableEvents = True
 End Sub
-</code></pre>
+```
 
 ## 其中`<>`为替换标签，以下为详细解释：
 
@@ -107,7 +107,7 @@ Fill the specified formula when the table cells in the specified range are null.
 Before using, please ensure that the spreadsheet file is in the format of a Microsoft 365MSO(versions 2504 Build 16.0.18730.20186) 64-bit Microsoft Excel Macro-Enabled Workbook (.xlsm).  
 When you are using other softwares or file formats, or even different versions of Microsoft Office Excel, the VBA codes may not work.
 
-<pre><code class="language-vba line-numbers">
+```vba
 ' Worksheet change event handler: This function is triggered when a user modifies any table cells within the worksheet.
 Private Sub Worksheet_Change(ByVal Target As Range)
     Dim cell As Range
@@ -141,7 +141,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     ' Restore event handling
     Application.EnableEvents = True
 End Sub
-</code></pre>
+```
 
 ## `<>` are replacement tags, with detailed explanations as follows:
 
