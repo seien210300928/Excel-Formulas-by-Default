@@ -144,9 +144,12 @@ End Sub
 </code></pre>
 
 ## `<>` are replacement tags, with detailed explanations as follows:
+
 ### `<Range_1>`&&`<Range_2>`
 `<Range_1>` is the scope where the code takes effect; `<Range_2>` is the scope where the code executes. Generally, **these two values are equal**.  
+
 #### Possible issues if they are not equal:
+
 1. ##### Separation of event triggering conditions and processing scope 
     Triggering condition: The code only triggers when the user modifies cells within `<Range_1>` (judged by `Intersect(Target, Range("<Range_1>"))`).  
     Processing scope: However, the subsequent iteration is over cells within Range_2 (via `Intersect(Target, Range("<Range_2>"))`).  
